@@ -1,0 +1,11 @@
+[package]
+name = "nu_plugin_nutext"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fluent-bundle = "0.15.3"
+fluent-fallback = "0.7.1"
+fluent-resmgr = "0.0.7"
+nu-plugin = "0.100.0"
+nu-protocol = "0.100.0"
