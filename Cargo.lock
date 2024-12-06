@@ -1111,6 +1111,7 @@ dependencies = [
  "fluent-resmgr",
  "nu-plugin",
  "nu-protocol",
+ "unic-langid-impl",
 ]
 
 [[package]]
