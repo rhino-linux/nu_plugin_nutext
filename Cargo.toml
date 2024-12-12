@@ -9,4 +9,5 @@ fluent-fallback = "0.7.1"
 fluent-resmgr = "0.0.7"
 nu-plugin = "0.100.0"
 nu-protocol = "0.100.0"
+unic-langid = { version = "0.9.5", features = ["macros"] }
 unic-langid-impl = "0.9.5"
