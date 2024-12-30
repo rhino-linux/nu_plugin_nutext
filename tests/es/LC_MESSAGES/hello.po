@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Me LMAO\n"
+"Last-Translator: Jo Mama\n"
+"Language-Team: Jo Mama Inc\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+
+msgid "Hello {name}"
+msgstr "Hola {name}"

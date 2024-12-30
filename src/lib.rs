@@ -5,9 +5,9 @@ mod commands;
 use crate::commands::print::Print;
 use crate::commands::register::Register;
 
-pub struct FluentPlugin;
+pub struct PrintPlugin;
 
-impl Plugin for FluentPlugin {
+impl Plugin for PrintPlugin {
     fn version(&self) -> String {
         env!("CARGO_PKG_VERSION").into()
     }
