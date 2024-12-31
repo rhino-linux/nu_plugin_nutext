@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
-use nu_protocol::{LabeledError, Record, Signature, Span, SyntaxShape, Value};
+use nu_protocol::{record, LabeledError, Signature, Span, SyntaxShape, Value};
 
 use crate::PrintPlugin;
 
@@ -32,7 +32,7 @@ impl SimplePluginCommand for Register {
         _input: &Value,
     ) -> Result<Value, LabeledError> {
         let path: PathBuf = call.req(0).unwrap();
-        let mofile: String = call.req(1).unwrap();
+        let name: String = call.req(1).unwrap();
 
         let validated_path = if path.exists() {
             path
@@ -45,16 +45,10 @@ impl SimplePluginCommand for Register {
             .add_env_var(
                 "NUTEXT_FILES",
                 Value::Record {
-                    val: Record::from_raw_cols_vals(
-                        vec!["path".into(), "name".into()],
-                        vec![
-                            Value::string(validated_path.to_str().unwrap(), Span::unknown()),
-                            Value::string(mofile, Span::unknown()),
-                        ],
-                        Span::unknown(),
-                        Span::unknown(),
-                    )
-                    .expect("Someone messed up the internal structure of the record. They clearly didn't test before pushing...")
+                    val: record! {
+                        "path" => Value::string(validated_path.to_str().unwrap(), Span::unknown()),
+                        "name" => Value::string(name, Span::unknown())
+                    }
                     .into(),
                     internal_span: Span::unknown(),
                 },

@@ -8,7 +8,7 @@ use current_locale::current_locale;
 use gettext::Catalog;
 use locale_match::bcp47::best_matching_locale;
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
-use nu_protocol::{Example, LabeledError, Record, Signature, SyntaxShape, Value};
+use nu_protocol::{Example, LabeledError, Record, Signature, Span, SyntaxShape, Value};
 use strfmt::strfmt;
 
 use crate::PrintPlugin;
@@ -32,6 +32,10 @@ impl SimplePluginCommand for Print {
             example: r#"tprint "Hello {name}" { name: "Foo" }"#,
             result: None,
         }]
+    }
+
+    fn search_terms(&self) -> Vec<&str> {
+        vec!["gettext", "translation", "i18n", "print", "tregister"]
     }
 
     fn signature(&self) -> Signature {
@@ -125,9 +129,9 @@ impl SimplePluginCommand for Print {
 
         let variable_store: HashMap<String, String> = match interp_vars {
             Some(vars) => vars
-                .iter()
-                .filter_map(|var| match var.1.coerce_string() {
-                    Ok(o) => Some((var.0.to_owned(), o)),
+                .into_iter()
+                .filter_map(|var| match var.1.coerce_into_string() {
+                    Ok(o) => Some((var.0, o)),
                     Err(_) => None,
                 })
                 .collect(),
@@ -139,7 +143,9 @@ impl SimplePluginCommand for Print {
             Err(e) => {
                 return Err(LabeledError::new("Missing variables")
                     .with_help("Did you provide all variables in the string?")
-                    .with_inner(LabeledError::new(e.to_string()).with_label("Here", call.head)))
+                    .with_inner(
+                        LabeledError::new(e.to_string()).with_label("Here", Span::unknown()),
+                    ))
             }
         };
 
