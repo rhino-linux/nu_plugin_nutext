@@ -46,9 +46,8 @@ impl SimplePluginCommand for Print {
         _input: &Value,
     ) -> Result<Value, LabeledError> {
         let Ok(Some(env)) = engine.get_env_var("NUTEXT_FILES") else {
-            return Err(LabeledError::new(
-                "No env variable `NUTEXT_FILES` found! Try `tregister` first.",
-            ));
+            return Err(LabeledError::new("No env variable `NUTEXT_FILES` found!")
+                .with_help("Try `tregister`."));
         };
 
         let path: PathBuf = PathBuf::from(
