@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
 use nu_protocol::{LabeledError, Record, Signature, Span, SyntaxShape, Value};
 
@@ -18,7 +20,7 @@ impl SimplePluginCommand for Register {
 
     fn signature(&self) -> Signature {
         Signature::build(self.name())
-            .required("dir", SyntaxShape::String, "directory containing locales")
+            .required("dir", SyntaxShape::Filepath, "directory containing locales")
             .required("name", SyntaxShape::String, "program name")
     }
 
@@ -29,8 +31,16 @@ impl SimplePluginCommand for Register {
         call: &EvaluatedCall,
         _input: &Value,
     ) -> Result<Value, LabeledError> {
-        let path: String = call.req(0).unwrap();
+        let path: PathBuf = call.req(0).unwrap();
         let mofile: String = call.req(1).unwrap();
+
+        let validated_path = if path.exists() {
+            path
+        } else {
+            return Err(LabeledError::new("Cannot find path.")
+                .with_help(format!("Verify that `{}` exists.", path.display())));
+        };
+
         engine
             .add_env_var(
                 "NUTEXT_FILES",
@@ -38,13 +48,13 @@ impl SimplePluginCommand for Register {
                     val: Record::from_raw_cols_vals(
                         vec!["path".into(), "name".into()],
                         vec![
-                            Value::string(path, Span::unknown()),
+                            Value::string(validated_path.to_str().unwrap(), Span::unknown()),
                             Value::string(mofile, Span::unknown()),
                         ],
                         Span::unknown(),
                         Span::unknown(),
                     )
-                    .unwrap()
+                    .expect("Someone messed up the internal structure of the record. They clearly didn't test before pushing...")
                     .into(),
                     internal_span: Span::unknown(),
                 },

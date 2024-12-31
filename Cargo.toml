@@ -10,4 +10,3 @@ locale-match = "0.2.2"
 nu-plugin = "0.100.0"
 nu-protocol = "0.100.0"
 strfmt = "0.2.4"
-tr = { version = "0.1.10", features = ["gettext"] }

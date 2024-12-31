@@ -8,7 +8,7 @@ use current_locale::current_locale;
 use gettext::Catalog;
 use locale_match::bcp47::best_matching_locale;
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
-use nu_protocol::{LabeledError, Signature, SyntaxShape, Value};
+use nu_protocol::{Example, LabeledError, Record, Signature, SyntaxShape, Value};
 use strfmt::strfmt;
 
 use crate::PrintPlugin;
@@ -26,6 +26,14 @@ impl SimplePluginCommand for Print {
         "Print out translated strings."
     }
 
+    fn examples(&self) -> Vec<nu_protocol::Example> {
+        vec![Example {
+            description: "Print a translated string",
+            example: r#"tprint "Hello {name}" { name: "Foo" }"#,
+            result: None,
+        }]
+    }
+
     fn signature(&self) -> Signature {
         Signature::build(self.name())
             .switch("stderr", "print to stderr instead of stdout", Some('e'))
@@ -35,7 +43,11 @@ impl SimplePluginCommand for Print {
                 Some('n'),
             )
             .required("key", SyntaxShape::String, "gettext key")
-            .rest("rest", SyntaxShape::String, "interpolation variables")
+            .optional(
+                "vars",
+                SyntaxShape::Record(vec![]),
+                "interpolation variables",
+            )
     }
 
     fn run(
@@ -47,7 +59,8 @@ impl SimplePluginCommand for Print {
     ) -> Result<Value, LabeledError> {
         let Ok(Some(env)) = engine.get_env_var("NUTEXT_FILES") else {
             return Err(LabeledError::new("No env variable `NUTEXT_FILES` found!")
-                .with_help("Try `tregister`."));
+                .with_help("Try `tregister`.")
+                .with_label("Here", call.head));
         };
 
         let path: PathBuf = PathBuf::from(
@@ -103,33 +116,43 @@ impl SimplePluginCommand for Print {
             Err(_) => Catalog::empty(),
         };
 
-        let to_print: String = call.req(0).unwrap();
-        let interp_vars = call.rest::<String>(1).unwrap_or_default();
+        let to_print: String = call
+            .req(0)
+            .expect("Why didn't nu catch this in the signature?");
+        let interp_vars: Option<Record> = call
+            .opt(1)
+            .expect("Why didn't nu catch this in the signature?");
 
-        let variable_store: HashMap<String, String> = interp_vars
-            .iter()
-            .filter_map(|var| var.split_once('=').map(|(a, b)| (a.into(), b.into())))
-            .collect();
+        let variable_store: HashMap<String, String> = match interp_vars {
+            Some(vars) => vars
+                .iter()
+                .filter_map(|var| match var.1.coerce_string() {
+                    Ok(o) => Some((var.0.to_owned(), o)),
+                    Err(_) => None,
+                })
+                .collect(),
+            None => HashMap::new(),
+        };
 
         let parsed_vars = match strfmt(catalog.gettext(&to_print), &variable_store) {
             Ok(o) => o,
             Err(e) => {
                 return Err(LabeledError::new("Missing variables")
                     .with_help("Did you provide all variables in the string?")
-                    .with_inner(LabeledError::new(e.to_string())))
+                    .with_inner(LabeledError::new(e.to_string()).with_label("Here", call.head)))
             }
         };
 
         if call.has_flag("stderr").unwrap_or(false) {
             if call.has_flag("no-newline").unwrap_or(false) {
-                eprint!("{parsed_vars}")
+                eprint!("{parsed_vars}");
             } else {
-                eprintln!("{parsed_vars}")
+                eprintln!("{parsed_vars}");
             };
         } else if call.has_flag("no-newline").unwrap_or(false) {
-            print!("{parsed_vars}")
+            print!("{parsed_vars}");
         } else {
-            println!("{parsed_vars}")
+            println!("{parsed_vars}");
         }
 
         Ok(Value::nothing(call.head))
