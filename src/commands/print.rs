@@ -8,7 +8,7 @@ use current_locale::current_locale;
 use gettext::Catalog;
 use locale_match::bcp47::best_matching_locale;
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
-use nu_protocol::{Example, LabeledError, Record, Signature, Span, SyntaxShape, Value};
+use nu_protocol::{Example, LabeledError, Record, Signature, SyntaxShape, Value};
 use strfmt::strfmt;
 
 use crate::PrintPlugin;
@@ -143,9 +143,11 @@ impl SimplePluginCommand for Print {
             Err(e) => {
                 return Err(LabeledError::new("Missing variables")
                     .with_help("Did you provide all variables in the string?")
-                    .with_inner(
-                        LabeledError::new(e.to_string()).with_label("Here", Span::unknown()),
-                    ))
+                    .with_inner(LabeledError::new(match e {
+                        strfmt::FmtError::Invalid(err)
+                        | strfmt::FmtError::KeyError(err)
+                        | strfmt::FmtError::TypeError(err) => err,
+                    })))
             }
         };
 

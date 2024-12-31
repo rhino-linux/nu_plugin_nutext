@@ -11,3 +11,6 @@ msgstr ""
 
 msgid "Hello {name}"
 msgstr "Hola {name}"
+
+msgid "One {one} Two {two}"
+msgstr "Uno {one} Dos {two}"
