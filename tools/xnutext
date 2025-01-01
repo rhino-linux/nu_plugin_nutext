@@ -1,6 +1,8 @@
 #!/usr/bin/env nu
 
 # Extract localized strings from files.
+#
+# NOTE: This requires that you have nutext installed.
 def main [
     --output (-o): path # Output file
     ...files: path # Input files
@@ -13,7 +15,7 @@ def main [
     mut buffer = ""
 
     for file in $files {
-        let file_ast = (ast -f -m $"(open $file --raw)")
+        let file_ast = (ast -f $"(open $file --raw)")
         mut found_tprint = false
         for section in $file_ast {
             if ($found_tprint == false) {
@@ -26,7 +28,7 @@ def main [
                     # TODO: Add lines here
                     $buffer += $"#: ($file | path basename)\n"
                     $buffer += $"msgid ($section.content)\n"
-                    $buffer += "msgstr \"\"\n"
+                    $buffer += "msgstr \"\"\n\n"
                     $found_tprint = false
                 }
             }
