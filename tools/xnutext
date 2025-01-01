@@ -33,6 +33,8 @@ def main [
                     let match_end = ($file_ast | get $match_idx | get span.end)
                     let line = ($file_contents | str substring 1..<$match_start | lines | length)
                     $buffer += $"#: ($file | path basename):($line)\n"
+                    # We only use this because it's the closest to what we do.
+                    $buffer += "#, python-brace-format\n"
                     $buffer += $"msgid ($cont.content)\n"
                     $buffer += "msgstr \"\"\n\n"
                     $found_tprint = false
