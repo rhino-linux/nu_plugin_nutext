@@ -1,0 +1,43 @@
+#!/usr/bin/env nu
+
+# Extract localized strings from files.
+def main [
+    --output (-o): path # Output file
+    ...files: path # Input files
+] {
+    if ($files | path exists | any {|path| $path == false}) {
+        print -e $"Cannot find path\(s\)"
+        exit 1
+    }
+
+    mut buffer = ""
+
+    for file in $files {
+        let file_ast = (ast -f -m $"(open $file --raw)")
+        mut found_tprint = false
+        for section in $file_ast {
+            if ($found_tprint == false) {
+                if ($section.content == "tprint" and $section.shape == "shape_internalcall") {
+                    $found_tprint = true
+                }
+            } else {
+                # Now we wait for a string muehehehe.
+                if ($section.shape == "shape_string") {
+                    # TODO: Add lines here
+                    $buffer += $"#: ($file | path basename)\n"
+                    $buffer += $"msgid ($section.content)\n"
+                    $buffer += "msgstr \"\"\n"
+                    $found_tprint = false
+                }
+            }
+        }
+    }
+
+    if ($output == null) {
+        print ($buffer | str trim --right)
+    } else {
+        $buffer | save $output
+    }
+
+    exit 0
+}
