@@ -19,7 +19,7 @@ def main [
         mut found_tprint = false
         for section in $file_ast {
             if ($found_tprint == false) {
-                if ($section.content == "tprint" and $section.shape == "shape_internalcall") {
+                if ($section.content == "tprint" and $section.shape == "shape_internalcall") or ($section.content == "_" and $section.shape == "shape_internalcall") {
                     $found_tprint = true
                 }
             } else {
