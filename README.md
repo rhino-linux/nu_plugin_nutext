@@ -28,6 +28,5 @@ I also have provided the tool `xnutext`, not too disimilar to `xgettext`, which 
 After you have verified these, you should run:
 
 ```bash
-heading=('#, fuzzy' 'msgid ""' 'msgstr ""' '"MIME-Version: 1.0\n"' '"Content-Type: text/plain; charset=UTF-8\n"' '"Content-Transfer-Encoding: ENCODING\n"' '"Plural-Forms: nplurals=2; plural=n != 1;\n"')
-(printf '%s\n' "${heading[@]}" && xnutext list of files) | msguniq > po/program.pot
+xnutext list of files -o po/program.pot
 ```

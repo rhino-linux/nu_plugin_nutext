@@ -12,10 +12,16 @@ def main [
         exit 1
     }
 
-    mut buffer = ""
+    mut buffer = 'msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"'
+    $buffer += "\n\n"
 
     for file in $files {
-        let file_ast = (ast -f (open $file --raw))
+        let file_ast = (ast -f (open --raw $file))
         mut found_tprint = false
         for section in ($file_ast | enumerate) {
             let cont = $section.item
@@ -43,8 +49,10 @@ def main [
         }
     }
 
+    $buffer = ($buffer | ^msguniq)
+
     if ($output == null) {
-        print ($buffer | str trim --right)
+        print $buffer
     } else {
         $buffer | save $output
     }

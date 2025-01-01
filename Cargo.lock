@@ -1047,7 +1047,7 @@ dependencies = [
 
 [[package]]
 name = "nu_plugin_nutext"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "current_locale",
  "gettext",
