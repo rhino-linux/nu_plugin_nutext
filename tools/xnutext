@@ -15,19 +15,25 @@ def main [
     mut buffer = ""
 
     for file in $files {
-        let file_ast = (ast -f $"(open $file --raw)")
+        let file_ast = (ast -f (open $file --raw))
         mut found_tprint = false
-        for section in $file_ast {
+        for section in ($file_ast | enumerate) {
+            let cont = $section.item
             if ($found_tprint == false) {
-                if ($section.content == "tprint" and $section.shape == "shape_internalcall") or ($section.content == "_" and $section.shape == "shape_internalcall") {
+                if ($cont.content == "tprint" and $cont.shape == "shape_internalcall") or ($cont.content == "_" and $cont.shape == "shape_internalcall") {
                     $found_tprint = true
                 }
             } else {
                 # Now we wait for a string muehehehe.
-                if ($section.shape == "shape_string") {
-                    # TODO: Add lines here
-                    $buffer += $"#: ($file | path basename)\n"
-                    $buffer += $"msgid ($section.content)\n"
+                if ($cont.shape == "shape_string") {
+                    let file_contents = (open --raw $file)
+                    let file_ast = (ast -f $file_contents)
+                    let match_idx = $section.index
+                    let match_start = ($file_ast | get $match_idx | get span.start)
+                    let match_end = ($file_ast | get $match_idx | get span.end)
+                    let line = ($file_contents | str substring 1..<$match_start | lines | length)
+                    $buffer += $"#: ($file | path basename):($line)\n"
+                    $buffer += $"msgid ($cont.content)\n"
                     $buffer += "msgstr \"\"\n\n"
                     $found_tprint = false
                 }
