@@ -1,12 +1,13 @@
 [package]
 name = "nu_plugin_nutext"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
+license = "GPL-2.0-or-later"
 
 [dependencies]
 current_locale = "0.1.1"
 gettext = "0.4.0"
-locale-match = "0.2.2"
+locale-match = { version = "0.2.2", default-features = false, features = ["bcp47"] }
 nu-plugin = "0.101.0"
 nu-protocol = "0.101.0"
 strfmt = "0.2.4"
