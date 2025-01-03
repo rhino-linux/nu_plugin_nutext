@@ -5,6 +5,9 @@ edition = "2021"
 license = "GPL-2.0-or-later"
 exclude = ["*.mo", "*.po"]
 
+[profile.release]
+lto = "fat"
+
 [dependencies]
 current_locale = "0.1.1"
 gettext = "0.4.0"
