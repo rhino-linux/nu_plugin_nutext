@@ -3,6 +3,7 @@ name = "nu_plugin_nutext"
 version = "0.2.1"
 edition = "2021"
 license = "GPL-2.0-or-later"
+exclude = ["*.mo", "*.po"]
 
 [dependencies]
 current_locale = "0.1.1"
