@@ -1,4 +1,4 @@
-#!/usr/bin/env nu
+#!/usr/bin/env -S nu --plugins '[/usr/share/nutext/nu_plugin_nutext]'
 
 # Extract localized strings from files.
 #
@@ -54,7 +54,7 @@ msgstr ""
     if ($output == null) {
         print $buffer
     } else {
-        $buffer | save $output
+        $buffer | save -f $output
     }
 
     exit 0
