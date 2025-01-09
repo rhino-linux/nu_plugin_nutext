@@ -8,7 +8,7 @@ use current_locale::current_locale;
 use gettext::Catalog;
 use locale_match::bcp47::best_matching_locale;
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
-use nu_protocol::{LabeledError, Record, Signature, Span, SyntaxShape, Value};
+use nu_protocol::{LabeledError, Record, Signature, SyntaxShape, Value};
 use strfmt::strfmt;
 
 use crate::PrintPlugin;
@@ -139,7 +139,7 @@ impl SimplePluginCommand for StringRet {
 
         Ok(Value::String {
             val: parsed_vars,
-            internal_span: Span::from(call.head),
+            internal_span: call.head,
         })
     }
 }
