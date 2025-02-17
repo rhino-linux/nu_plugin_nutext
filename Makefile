@@ -13,7 +13,7 @@ uninstall:
 	rm -fv /usr/share/nutext/nu_plugin_nutext /usr/bin/xnutext
 
 dist: build tools/xnutext LICENSE README.md
-	rm -r dist/
+	rm -rf dist/
 	mkdir -p dist/
 	tar -czvf dist/nutext-$(VERSION).tar.gz target/release/nu_plugin_nutext tools/xnutext LICENSE README.md
 	sha256sum dist/nutext-$(VERSION).tar.gz > dist/SHA256SUM
