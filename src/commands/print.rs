@@ -8,11 +8,11 @@ pub struct Print;
 impl SimplePluginCommand for Print {
     type Plugin = PrintPlugin;
 
-    fn name(&self) -> &str {
+    fn name(&self) -> &'static str {
         "tprint"
     }
 
-    fn description(&self) -> &str {
+    fn description(&self) -> &'static str {
         "Print out translated strings."
     }
 

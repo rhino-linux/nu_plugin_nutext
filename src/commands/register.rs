@@ -10,11 +10,11 @@ pub struct Register;
 impl SimplePluginCommand for Register {
     type Plugin = PrintPlugin;
 
-    fn name(&self) -> &str {
+    fn name(&self) -> &'static str {
         "tregister"
     }
 
-    fn description(&self) -> &str {
+    fn description(&self) -> &'static str {
         "Register locales."
     }
 

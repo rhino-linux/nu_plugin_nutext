@@ -18,11 +18,11 @@ pub struct StringRet;
 impl SimplePluginCommand for StringRet {
     type Plugin = PrintPlugin;
 
-    fn name(&self) -> &str {
+    fn name(&self) -> &'static str {
         "_"
     }
 
-    fn description(&self) -> &str {
+    fn description(&self) -> &'static str {
         "Return translated string"
     }
 
