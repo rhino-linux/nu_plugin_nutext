@@ -23,7 +23,7 @@ let my_var = (_ "Hello {world}" { world: "World" })
 I also have provided the tool `xnutext`, not too disimilar to `xgettext`, which will extract all translatable strings from your nu programs. There are two catches to using this:
 
 1. Nutext must be installed and functional.
-2. Your program must be syntactically correct according to Nu: `xnutext` will not extract text if the program cannot be ran.
+2. Your program must be syntactically correct according to Nu: `xnutext` will not extract text if the program cannot be ran. This is because `xnutext` relies on Nu's AST capabilities to accurately know where commands are being run (as opposed to say, a string that contains `_`).
 
 After you have verified these, you should run:
 
