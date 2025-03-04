@@ -55,26 +55,22 @@ impl SimplePluginCommand for StringRet {
 
         let path: PathBuf = PathBuf::from(
             env.clone()
-                .as_record()
-                .unwrap()
+                .as_record()?
                 .get("path")
                 .unwrap()
                 .clone()
-                .into_string()
-                .unwrap(),
+                .into_string()?,
         );
 
         let name: String = env
             .clone()
-            .as_record()
-            .unwrap()
+            .as_record()?
             .get("name")
             .unwrap()
             .clone()
-            .into_string()
-            .unwrap();
+            .into_string()?;
 
-        let call_dir: PathBuf = engine.get_current_dir().unwrap().into();
+        let call_dir: PathBuf = engine.get_current_dir()?.into();
 
         let available_locales: Vec<String> = fs::read_dir(call_dir.join(&path))
             .expect("Could not open path")

@@ -59,16 +59,15 @@ impl SimplePluginCommand for Print {
                     let val = val
                         .coerce_string()
                         .expect("Could not coerce output into string");
-                    if call.has_flag("stderr").unwrap_or(false) {
-                        if call.has_flag("no-newline").unwrap_or(false) {
-                            eprint!("{val}");
-                        } else {
-                            eprintln!("{val}");
-                        };
-                    } else if call.has_flag("no-newline").unwrap_or(false) {
-                        print!("{val}");
-                    } else {
-                        println!("{val}");
+
+                    match (
+                        call.has_flag("stderr").unwrap_or(false),
+                        call.has_flag("no-newline").unwrap_or(false),
+                    ) {
+                        (true, true) => eprint!("{val}"),
+                        (true, false) => eprintln!("{val}"),
+                        (false, true) => print!("{val}"),
+                        (false, false) => println!("{val}"),
                     }
                     Ok(Value::nothing(call.head))
                 }
