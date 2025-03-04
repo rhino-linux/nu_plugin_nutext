@@ -31,8 +31,8 @@ impl SimplePluginCommand for Register {
         call: &EvaluatedCall,
         _input: &Value,
     ) -> Result<Value, LabeledError> {
-        let path: PathBuf = call.req(0).unwrap();
-        let name: String = call.req(1).unwrap();
+        let path: PathBuf = call.req(0)?;
+        let name: String = call.req(1)?;
 
         let validated_path = if path.exists() {
             path
@@ -53,7 +53,7 @@ impl SimplePluginCommand for Register {
                     internal_span: Span::unknown(),
                 },
             )
-            .unwrap();
+            .unwrap(); // This literally cannot fail.
         Ok(Value::nothing(call.head))
     }
 }

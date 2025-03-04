@@ -52,9 +52,8 @@ impl SimplePluginCommand for Print {
         _input: &Value,
     ) -> Result<Value, LabeledError> {
         if let Some(decl_id) = engine.find_decl("_")? {
-            let commands =
-                engine.call_decl(decl_id, call.clone(), PipelineData::empty(), true, true)?;
-            match commands {
+            // Pass our data into `_` and get back the data to print later.
+            match engine.call_decl(decl_id, call.clone(), PipelineData::empty(), true, true)? {
                 PipelineData::Value(val, _) => {
                     let val = val
                         .coerce_string()
@@ -71,7 +70,9 @@ impl SimplePluginCommand for Print {
                     }
                     Ok(Value::nothing(call.head))
                 }
-                _ => todo!("bruh"),
+                _ => {
+                    unimplemented!("You may be using mismatched features between nutext versions!")
+                }
             }
         } else {
             Err(LabeledError::new("Could not find `_`"))

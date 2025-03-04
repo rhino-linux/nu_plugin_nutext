@@ -54,8 +54,7 @@ impl SimplePluginCommand for StringRet {
         };
 
         let path: PathBuf = PathBuf::from(
-            env.clone()
-                .as_record()?
+            env.as_record()?
                 .get("path")
                 .unwrap()
                 .clone()
@@ -63,7 +62,6 @@ impl SimplePluginCommand for StringRet {
         );
 
         let name: String = env
-            .clone()
             .as_record()?
             .get("name")
             .unwrap()
@@ -102,12 +100,8 @@ impl SimplePluginCommand for StringRet {
             Err(_) => Catalog::empty(),
         };
 
-        let to_print: String = call
-            .req(0)
-            .expect("Why didn't nu catch this in the signature?");
-        let interp_vars: Option<Record> = call
-            .opt(1)
-            .expect("Why didn't nu catch this in the signature?");
+        let to_print: String = call.req(0)?;
+        let interp_vars: Option<Record> = call.opt(1)?;
 
         let variable_store: HashMap<String, String> = match interp_vars {
             Some(vars) => vars
