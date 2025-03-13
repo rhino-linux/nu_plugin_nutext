@@ -103,16 +103,14 @@ impl SimplePluginCommand for StringRet {
         let to_print: String = call.req(0)?;
         let interp_vars: Option<Record> = call.opt(1)?;
 
-        let variable_store: HashMap<String, String> = match interp_vars {
-            Some(vars) => vars
-                .into_iter()
-                .filter_map(|var| match var.1.coerce_into_string() {
-                    Ok(o) => Some((var.0, o)),
-                    Err(_) => None,
-                })
-                .collect(),
-            None => HashMap::new(),
-        };
+        let variable_store = interp_vars
+            .unwrap_or_default()
+            .into_iter()
+            .filter_map(|var| match var.1.coerce_into_string() {
+                Ok(o) => Some((var.0, o)),
+                Err(_) => None,
+            })
+            .collect::<HashMap<String, String>>();
 
         let parsed_vars = match strfmt(catalog.gettext(&to_print), &variable_store) {
             Ok(o) => o,
