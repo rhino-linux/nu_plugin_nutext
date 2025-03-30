@@ -1,0 +1,31 @@
+name: Nutext Binary Generation
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: amd64
+          - os: ubuntu-24.04-arm
+            arch: arm64
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install needed packages
+      run: |
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo sed -i 's/noble/.\/devel/g' /etc/apt/sources.list.d/ubuntu.sources
+        sudo apt-get update && sudo apt-get install cargo -y
+
+    - name: Build
+      run: sudo make all DESTDIR="builds/${{ matrix.arch }}"
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Nutext (${{ matrix.arch }})
+        path: build/builds/${{ matrix.arch }}/
