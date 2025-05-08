@@ -634,9 +634,9 @@ checksum = "cd945864f07fe9f5371a27ad7b52a172b4b499999f1d97574c9fa68373937e12"
 
 [[package]]
 name = "locale-match"
-version = "0.2.4"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a31530bec3e80269c336fe790f46bb298c096ce9b23eae38c1ce15afe8a3e22"
+checksum = "ac4b9122a2cef171ad08c1d3a20b52b5e96ece4eaedd748dea0a5640729c59ef"
 dependencies = [
  "language-tags",
 ]
@@ -964,7 +964,7 @@ dependencies = [
 
 [[package]]
 name = "nu_plugin_nutext"
-version = "0.3.3"
+version = "0.3.4"
 dependencies = [
  "current_locale",
  "gettext",

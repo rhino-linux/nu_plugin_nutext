@@ -1,6 +1,6 @@
 [package]
 name = "nu_plugin_nutext"
-version = "0.3.3"
+version = "0.3.4"
 edition = "2021"
 license = "GPL-2.0-or-later"
 exclude = ["*.mo", "*.po"]
@@ -11,7 +11,7 @@ lto = "fat"
 [dependencies]
 current_locale = "0.1.1"
 gettext = "0.4.0"
-locale-match = { version = "0.2.2", default-features = false, features = [
+locale-match = { version = "=0.2.2", default-features = false, features = [
     "bcp47",
 ] }
 nu-plugin = "0.104.0"
