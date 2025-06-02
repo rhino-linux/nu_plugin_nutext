@@ -1,4 +1,4 @@
-#!/usr/bin/env -S nu --plugins '[/usr/share/nutext/nu_plugin_nutext]'
+#!/usr/bin/env -S nu --plugins ['/usr/share/nutext/nu_plugin_nutext']
 
 # Extract localized strings from files.
 #
