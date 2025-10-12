@@ -16,7 +16,7 @@ impl SimplePluginCommand for Print {
         "Print out translated strings."
     }
 
-    fn examples(&self) -> Vec<nu_protocol::Example> {
+    fn examples(&self) -> Vec<nu_protocol::Example<'_>> {
         vec![Example {
             description: "Print a translated string",
             example: r#"tprint "Hello {name}" { name: "Foo" }"#,

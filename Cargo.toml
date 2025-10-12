@@ -14,6 +14,6 @@ gettext = "0.4.0"
 locale-match = { version = "=0.2.2", default-features = false, features = [
     "bcp47",
 ] }
-nu-plugin = "0.106.0"
-nu-protocol = "0.106.0"
-strfmt = "0.2.4"
+nu-plugin = "0.107.0"
+nu-protocol = "0.107.0"
+strfmt = "0.2.5"
