@@ -121,13 +121,10 @@ impl SimplePluginCommand for StringRet {
                         strfmt::FmtError::Invalid(err)
                         | strfmt::FmtError::KeyError(err)
                         | strfmt::FmtError::TypeError(err) => err,
-                    })))
+                    })));
             }
         };
 
-        Ok(Value::String {
-            val: parsed_vars,
-            internal_span: call.head,
-        })
+        Ok(Value::string(parsed_vars, call.head))
     }
 }

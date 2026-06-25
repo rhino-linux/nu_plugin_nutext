@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use nu_plugin::{EngineInterface, EvaluatedCall, SimplePluginCommand};
-use nu_protocol::{record, LabeledError, Signature, Span, SyntaxShape, Value};
+use nu_protocol::{LabeledError, Signature, Span, SyntaxShape, Value, record};
 
 use crate::PrintPlugin;
 
@@ -44,14 +44,13 @@ impl SimplePluginCommand for Register {
         engine
             .add_env_var(
                 "NUTEXT_FILES",
-                Value::Record {
-                    val: record! {
+                Value::record(
+                    record! {
                         "path" => Value::string(validated_path.to_str().unwrap(), Span::unknown()),
                         "name" => Value::string(name, Span::unknown())
-                    }
-                    .into(),
-                    internal_span: Span::unknown(),
-                },
+                    },
+                    Span::unknown(),
+                ),
             )
             .unwrap(); // This literally cannot fail.
         Ok(Value::nothing(call.head))
