@@ -18,6 +18,8 @@ jobs:
 
     - name: Install needed packages
       run: |
+        sudo rm -rf /var/lib/apt/lists/*
+        sudo sed -i 's/resolute/.\/devel/g' /etc/apt/sources.list.d/ubuntu.sources
         sudo apt-get update && sudo apt-get install cargo -y
 
     - name: Build
