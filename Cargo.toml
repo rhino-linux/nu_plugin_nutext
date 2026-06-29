@@ -1,9 +1,10 @@
 [package]
 name = "nu_plugin_nutext"
-version = "0.6.0"
+version = "0.6.1"
 edition = "2024"
 license = "GPL-2.0-or-later"
 exclude = ["*.mo", "*.po"]
+rust-version = "1.93.1"
 
 [profile.release]
 lto = "fat"
